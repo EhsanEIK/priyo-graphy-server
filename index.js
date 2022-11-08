@@ -71,6 +71,22 @@ const run = async () => {
             res.send(review);
         })
 
+        // reviews [PUT method]
+        app.put('/reviews/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) };
+            const review = req.body;
+            const options = { upsert: true };
+            const updateReview = {
+                $set: {
+                    reviewText: review.reviewText,
+                    rating: review.rating,
+                }
+            };
+            const result = await reviewsCollection.updateOne(filter, updateReview, options);
+            res.send(result);
+        })
+
         // reviews [POST method]
         app.post('/reviews', async (req, res) => {
             const review = req.body;
