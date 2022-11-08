@@ -17,6 +17,13 @@ const run = async () => {
     try {
         const servicesCollection = client.db('priyoGraphyDB').collection('services');
 
+        // services [GET method]
+        app.get('/services', async (req, res) => {
+            const query = {};
+            const services = await servicesCollection.find(query).toArray();
+            res.send(services);
+        })
+
         // services [POST method]
         app.post('/services', async (req, res) => {
             const service = req.body;
