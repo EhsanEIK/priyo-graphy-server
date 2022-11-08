@@ -1,4 +1,4 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 5000;
@@ -29,6 +29,14 @@ const run = async () => {
                 services = await servicesCollection.find(query).toArray();
             }
             res.send(services);
+        })
+
+        // services [GET method - single data]
+        app.get('/services/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const service = await servicesCollection.findOne(query);
+            res.send(service);
         })
 
         // services [POST method]
