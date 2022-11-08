@@ -16,6 +16,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 const run = async () => {
     try {
         const servicesCollection = client.db('priyoGraphyDB').collection('services');
+        const reviewsCollection = client.db('priyoGraphyDB').collection('reviews');
 
         // services [GET method]
         app.get('/services', async (req, res) => {
@@ -43,6 +44,13 @@ const run = async () => {
         app.post('/services', async (req, res) => {
             const service = req.body;
             const result = await servicesCollection.insertOne(service);
+            res.send(result);
+        })
+
+        // reviews [POST method]
+        app.post('/reviews', async (req, res) => {
+            const review = req.body;
+            const result = await reviewsCollection.insertOne(review);
             res.send(result);
         })
     }
