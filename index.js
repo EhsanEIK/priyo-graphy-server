@@ -47,6 +47,15 @@ const run = async () => {
             res.send(result);
         })
 
+        // reviews based on service id [GET method]
+        app.get('/reviews/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { serviceId: id };
+            const reviews = await reviewsCollection.find(query).toArray();
+            console.log(reviews)
+            res.send(reviews);
+        })
+
         // reviews [POST method]
         app.post('/reviews', async (req, res) => {
             const review = req.body;
