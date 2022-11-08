@@ -13,6 +13,21 @@ app.use(express.json());
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.fbieij7.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
+const run = async () => {
+    try {
+        const servicesCollection = client.db('priyoGraphyDB').collection('services');
+
+        // services [POST method]
+        app.post('/services', async (req, res) => {
+            const service = req.body;
+            const result = await servicesCollection.insertOne(service);
+            res.send(result);
+        })
+    }
+    finally { }
+}
+run().catch(error => console.error(error));
+
 
 app.get('/', (req, res) => {
     res.send('Priyo Graphy Server is running');
