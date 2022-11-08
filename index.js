@@ -56,11 +56,19 @@ const run = async () => {
         })
 
         // reviews based on service id [GET method]
-        app.get('/reviews/:id', async (req, res) => {
+        app.get('/reviews/services/:id', async (req, res) => {
             const id = req.params.id;
             const query = { serviceId: id };
             const reviews = await reviewsCollection.find(query).toArray();
             res.send(reviews);
+        })
+
+        // reviews based on id [GET method - single data]
+        app.get('/reviews/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const review = await reviewsCollection.findOne(query);
+            res.send(review);
         })
 
         // reviews [POST method]
@@ -73,7 +81,6 @@ const run = async () => {
         // reviews [DELETE method]
         app.delete('/reviews/:id', async (req, res) => {
             const id = req.params.id;
-            console.log(id)
             const query = { _id: ObjectId(id) };
             const result = await reviewsCollection.deleteOne(query);
             res.send(result);
