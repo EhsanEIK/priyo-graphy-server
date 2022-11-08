@@ -20,7 +20,14 @@ const run = async () => {
         // services [GET method]
         app.get('/services', async (req, res) => {
             const query = {};
-            const services = await servicesCollection.find(query).toArray();
+            let services;
+            if (req.query.size) {
+                const size = parseInt(req.query.size);
+                services = await servicesCollection.find(query).limit(size).toArray();
+            }
+            else {
+                services = await servicesCollection.find(query).toArray();
+            }
             res.send(services);
         })
 
