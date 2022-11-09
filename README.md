@@ -2,8 +2,8 @@
 ### Live Website Link: https://priyo-graphy-server.vercel.app/ ###
 
 
-Technology: Node.js, Express.js, CORS.
-Databse: MongoDB.
+**Technology:** Node.js, Express.js, CORS.
+**Databse:** MongoDB.
 
 Special Features:
 * Created some data for client side.
