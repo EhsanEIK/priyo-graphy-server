@@ -7,6 +7,22 @@ const jwt = require('jsonwebtoken');
 
 require('dotenv').config();
 
+// function for verifying jwt
+function verifyJWT(req, res, next) {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(401).send({ message: 'unauthorized access' });
+    }
+    const token = authHeader.split(' ')[1];
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function (err, decoded) {
+        if (err) {
+            return res.status(401).send({ message: 'unauthorized access' });
+        }
+        req.decoded = decoded;
+        next();
+    })
+}
+
 // middleware
 app.use(cors());
 app.use(express.json());
@@ -56,8 +72,12 @@ const run = async () => {
         })
 
         // reviews based on user email [GET method]
-        app.get('/reviews', async (req, res) => {
+        app.get('/reviews', verifyJWT, async (req, res) => {
             const email = req.query.email;
+            // verifying jwt token with valid user
+            if (req.decoded.currentUserEmail !== email) {
+                return res.status(403).send({ message: 'unauthorized access' });
+            }
             const query = { userEmail: email };
             const reviews = await reviewsCollection.find(query).toArray();
             res.send(reviews);
