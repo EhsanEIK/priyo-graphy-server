@@ -87,7 +87,8 @@ const run = async () => {
         app.get('/reviews/services/:id', async (req, res) => {
             const id = req.params.id;
             const query = { serviceId: id };
-            const reviews = await reviewsCollection.find(query).toArray();
+            const dateSort = { date: -1 }; // sort reviews by latest date in descending
+            const reviews = await reviewsCollection.find(query).sort(dateSort).toArray();
             res.send(reviews);
         })
 
