@@ -19,6 +19,13 @@ const run = async () => {
         const servicesCollection = client.db('priyoGraphyDB').collection('services');
         const reviewsCollection = client.db('priyoGraphyDB').collection('reviews');
 
+        // jwt
+        app.post('/jwt', (req, res) => {
+            const user = req.body;
+            const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' });
+            res.send({ token });
+        })
+
         // services [GET method]
         app.get('/services', async (req, res) => {
             const query = {};
