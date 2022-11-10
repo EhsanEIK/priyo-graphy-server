@@ -46,14 +46,17 @@ const run = async () => {
         app.get('/services', async (req, res) => {
             const query = {};
             let services;
-            if (req.query.size) {
-                const size = parseInt(req.query.size);
-                services = await servicesCollection.find(query).limit(size).toArray();
+            let count;
+            const page = parseInt(req.query.page);
+            const size = parseInt(req.query.size);
+            if (page >= 0 && size) {
+                services = await servicesCollection.find(query).skip(page * size).limit(size).toArray();
+                count = await servicesCollection.estimatedDocumentCount();
             }
             else {
-                services = await servicesCollection.find(query).toArray();
+                services = await servicesCollection.find(query).limit(size).toArray();
             }
-            res.send(services);
+            res.send({ count, services });
         })
 
         // services [GET method - single data]
